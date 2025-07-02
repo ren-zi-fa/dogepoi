@@ -1,5 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
 import home from "./home";

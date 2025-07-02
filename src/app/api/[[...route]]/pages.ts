@@ -9,14 +9,25 @@ const pageRoute = new Hono();
 
 pageRoute.get("/:halaman", async (c) => {
   const { halaman } = c.req.param();
+
   if (!halaman) {
     return c.json(
       { success: false, message: "Missing halaman parameter" },
       400
     );
   }
+
+  if (halaman === "1") {
+    return c.json({
+      success: true,
+      data: { episodeTerbaru: [] },
+      message: "Tidak ada data pada halaman 1",
+    });
+  }
+
   const fullTargetUrl = `${target_url.replace(/\/$/, "")}/page/${halaman}`;
   console.log(fullTargetUrl);
+
   try {
     const response = await axios.get(proxy, {
       headers: {
@@ -41,7 +52,11 @@ pageRoute.get("/:halaman", async (c) => {
       })
       .get();
 
-    return c.json({ success: true, data: { episodeTerbaru } });
+    return c.json({
+      success: true,
+      data: { episodeTerbaru: episodeTerbaru.length > 0 ? episodeTerbaru : [] },
+      message: episodeTerbaru.length === 0 ? "Tidak ada data pada halaman ini" : undefined,
+    });
   } catch (error) {
     console.error("❌ Error scraping:", error);
     return c.json(

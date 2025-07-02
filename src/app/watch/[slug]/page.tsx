@@ -1,5 +1,5 @@
 import WatchAnime from "@/components/WatchingHentai";
-import { WatchAnimeResponse, WatchinAnime } from "@/types";
+import {  WatchinAnime } from "@/types";
 
 export default async function AnimePage({
   params,
@@ -15,7 +15,7 @@ export default async function AnimePage({
   const data = json.data as WatchinAnime;
 
   return (
-    <div className="">
+    <div className="mt-10">
       <WatchAnime {...data} />
     </div>
   );

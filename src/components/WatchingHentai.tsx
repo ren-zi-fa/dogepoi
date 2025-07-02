@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import {
   Play,
@@ -12,10 +12,9 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Separator } from "@radix-ui/react-separator";
 import { WatchinAnime } from "@/types";
+import Image from "next/image";
 
-
-
-export default function WatchAnime(props: WatchinAnime ) {
+export default function WatchAnime(props: WatchinAnime) {
   const {
     duration,
     genres,
@@ -46,21 +45,19 @@ export default function WatchAnime(props: WatchinAnime ) {
       <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
         {/* Mobile-first responsive grid */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
-          
           {/* Poster Section - Mobile: full width, Desktop: sidebar */}
           <div className="xl:col-span-4 2xl:col-span-3">
             <div className="overflow-hidden shadow-xl rounded-lg bg-white dark:bg-slate-800 sticky top-24">
               <div className="relative">
-                <img
-                  src={image}
-                  alt={title}
-                  className="w-full h-[300px] sm:h-[400px] lg:h-[500px] xl:h-[600px] object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src =
-                      "https://via.placeholder.com/400x600/1f2937/ffffff?text=No+Image";
-                  }}
-                />
+                {image && title && (
+                  <Image
+                    src={image}
+                    alt={title}
+                    width={400}
+                    height={600}
+                    className="w-full h-[300px] sm:h-[400px] lg:h-[500px] xl:h-[600px] object-cover"
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4">
                   <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg leading-tight">
@@ -78,7 +75,6 @@ export default function WatchAnime(props: WatchinAnime ) {
 
           {/* Content Section */}
           <div className="xl:col-span-8 2xl:col-span-9 space-y-4 sm:space-y-6">
-            
             {/* Video Player Card - Enhanced for mobile */}
             <div className="shadow-lg overflow-hidden rounded-lg bg-white dark:bg-slate-800">
               <div className="p-4 sm:p-6 pb-3 sm:pb-4 border-b border-slate-200 dark:border-slate-700">
@@ -97,7 +93,9 @@ export default function WatchAnime(props: WatchinAnime ) {
                           setIsSourceDropdownOpen(!isSourceDropdownOpen)
                         }
                       >
-                        <span className="text-xs sm:text-sm">Source {selectedVideoIndex + 1}</span>
+                        <span className="text-xs sm:text-sm">
+                          Source {selectedVideoIndex + 1}
+                        </span>
                         <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
                       </button>
 
@@ -125,7 +123,7 @@ export default function WatchAnime(props: WatchinAnime ) {
                   )}
                 </div>
               </div>
-              
+
               <div className="p-4 sm:p-6 pt-0">
                 <div className="relative">
                   {/* Video Container with better aspect ratio handling */}
@@ -139,7 +137,9 @@ export default function WatchAnime(props: WatchinAnime ) {
                         className="w-full h-full border-0"
                         allowFullScreen
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        title={`Watch ${title} - Source ${selectedVideoIndex + 1}`}
+                        title={`Watch ${title} - Source ${
+                          selectedVideoIndex + 1
+                        }`}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
@@ -165,7 +165,8 @@ export default function WatchAnime(props: WatchinAnime ) {
                 {/* Video Source Info */}
                 {sources_video && sources_video.length > 0 && (
                   <div className="mt-2 sm:mt-3 text-xs text-slate-500 text-center sm:text-left">
-                    Current source: {selectedVideoIndex + 1} of {sources_video.length}
+                    Current source: {selectedVideoIndex + 1} of{" "}
+                    {sources_video.length}
                   </div>
                 )}
               </div>
@@ -173,7 +174,6 @@ export default function WatchAnime(props: WatchinAnime ) {
 
             {/* Enhanced Info Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              
               {/* Details Card */}
               <Card className="shadow-md hover:shadow-lg transition-shadow">
                 <CardHeader className="pb-3">
@@ -213,15 +213,21 @@ export default function WatchAnime(props: WatchinAnime ) {
               {/* Genres Card */}
               {Array.isArray(genres) &&
                 genres.length > 0 &&
-                genres.some((genre) => genre && String(genre).trim() !== "") && (
+                genres.some(
+                  (genre) => genre && String(genre).trim() !== ""
+                ) && (
                   <div className="shadow-md hover:shadow-lg transition-shadow rounded-lg bg-white dark:bg-slate-800">
                     <div className="p-4 sm:p-6 pb-3 border-b border-slate-200 dark:border-slate-700">
-                      <h3 className="text-base sm:text-lg font-semibold">Genres</h3>
+                      <h3 className="text-base sm:text-lg font-semibold">
+                        Genres
+                      </h3>
                     </div>
                     <div className="p-4 sm:p-6">
                       <div className="flex flex-wrap gap-2">
                         {genres
-                          .filter((genre) => genre && String(genre).trim() !== "")
+                          .filter(
+                            (genre) => genre && String(genre).trim() !== ""
+                          )
                           .map((genre, index) => (
                             <span
                               key={`genre-${index}`}

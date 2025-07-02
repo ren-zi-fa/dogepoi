@@ -1,6 +1,4 @@
 import { HentaiDetailCard } from "@/components/DetailCard";
-
-
 export default async function AnimeDetail({
   params,
 }: {

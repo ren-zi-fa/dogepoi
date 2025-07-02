@@ -4,12 +4,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { AnimeDetail } from "@/types";
+import Link from "next/link";
 
 interface Props {
   data: AnimeDetail;
 }
 
 export const HentaiDetailCard = ({ data }: Props) => {
+  const url = data.latestEpisode.link;
+  const slug = url.replace(/\/$/, "").split("/").pop();
+
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
@@ -53,13 +57,13 @@ export const HentaiDetailCard = ({ data }: Props) => {
           <h3 className="font-semibold text-lg mt-6 mb-2">Episode Terbaru</h3>
           <div className="text-sm">
             <strong>{data.latestEpisode.title}</strong> —{" "}
-            <a
-              href={data.latestEpisode.link}
+            <Link
+              href={`/watch/${slug}`}
               className="text-blue-500 underline"
-              target="_blank"
+          
             >
               watch
-            </a>
+            </Link>
           </div>
         </div>
       </CardContent>

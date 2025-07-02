@@ -1,3 +1,7 @@
+import AnimeHentai from "@/components/CardHentai";
+import { AnimeResponse, AnimeResponseData } from "@/types";
+
+const server_url = process.env.NEXT_PUBLIC_URL;
 export default async function AnimePage({
   params,
 }: {
@@ -5,16 +9,25 @@ export default async function AnimePage({
 }) {
   const { num } = await params;
 
-  return (
-    <main className="max-w-3xl mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-4">Detail Anime</h1>
-      <p className="text-xl">
-        Parameter dari URL:{" "}
-        <span className="font-mono text-blue-600">{num}</span>
-      </p>
+  const resHome = await fetch(`${server_url}/api/home`, {
+    next: { revalidate: 3600 },
+  });
+  const hentai: AnimeResponse<AnimeResponseData> = await resHome.json();
 
-      {/* Kamu bisa fetch data berdasarkan 'name' di sini */}
-      {/* Contoh: await fetch(`https://api.com/anime/${name}`) */}
-    </main>
+  const resPage = await fetch(`${process.env.MY_URL}/api/page/${num}`);
+  if (!resPage.ok) {
+    return <div>Gagal memuat data</div>;
+  }
+
+  const pageJson = await resPage.json();
+  const episodeTerbaru = pageJson?.data?.episodeTerbaru ?? [];
+
+  return (
+    <div className="mt-10">
+      <AnimeHentai
+        hentaiTerbaru={hentai.data.hentaiTerbaru}
+        episodeTerbaru={episodeTerbaru}
+      />
+    </div>
   );
 }
