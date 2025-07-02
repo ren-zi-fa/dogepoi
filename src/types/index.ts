@@ -41,8 +41,23 @@ export interface AnimeDetail {
   episodes: Episode[];
 }
 
-
 export interface AnimeResponse<T> {
   success: boolean;
   data: T;
 }
+
+export interface WatchinAnime {
+  duration?: string;
+  genres?: string[];
+  image?: string;
+  note?: string;
+  producer?: string;
+  sinopsis?: string;
+  size?: string;
+  sources_video?: string[];
+  title?: string;
+}
+export type WatchAnimeResponse<T> = {
+  success: boolean;
+  data: T;
+};

@@ -17,7 +17,6 @@ detailRoute.get("/:slug", async (c) => {
   // Gabungkan URL target
   const fullTargetUrl = `${url_target.replace(/\/$/, "")}/hentai/${slug}`;
 
-  console.log(fullTargetUrl);
 
   try {
     const { data: html } = await axios.get(proxy, {
