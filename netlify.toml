@@ -10,7 +10,7 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Untuk Hono, mungkin perlu redirect manual
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
