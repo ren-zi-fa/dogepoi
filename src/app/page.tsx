@@ -1,3 +1,5 @@
+
+
 import AnimeHentai from "@/components/CardHentai";
 import { AnimeResponse, AnimeResponseData } from "@/types";
 const server_url = process.env.NEXT_PUBLIC_URL;
