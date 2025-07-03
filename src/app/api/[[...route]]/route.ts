@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { handle } from "hono/vercel";
+import { handle } from "hono/netlify";
 import home from "./home";
 import detail from "./detail";
 import watch from "./watch";
