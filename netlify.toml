@@ -1,18 +1,14 @@
 [build]
-  command = "pnpm build"
+  command = "pnpm  build"
   publish = ".next"
-  
-[build.environment]
-  NEXT_PUBLIC_URL = "https://dogepoi.netlify.app"
-  MY_URL = "https://dogepoi.netlify.app"
-  PROXY = "https://my-proxy-production.up.railway.app"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
+  to = "/.netlify/functions/___netlify-handler"
   status = 200
-  force = true
+
+[functions]
+  directory = ".netlify/functions"
