@@ -29,7 +29,6 @@ export default function WatchAnime(props: WatchinAnime) {
 
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
   const [isSourceDropdownOpen, setIsSourceDropdownOpen] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   return (
