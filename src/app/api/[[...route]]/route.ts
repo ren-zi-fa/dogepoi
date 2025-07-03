@@ -9,7 +9,7 @@ const app = new Hono().basePath("/api");
 
 app.get("/", (c) => c.json({ message: "this works" }));
 
-const routes = app
+export const routes = app
   .route("/home", home)
   .route("/detail", detail)
   .route("/watch", watch)
