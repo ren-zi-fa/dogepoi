@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import SearchBar from "./SearchBar";
 
 export default function Navbar() {
   return (
@@ -15,17 +16,12 @@ export default function Navbar() {
             height={100}
             className="rounded-full"
           />
-          <span className="hidden sm:inline text-sm font-medium text-muted-foreground">
+          <span className="hidden text-sm font-medium text-muted-foreground md:inline">
             DogePoi
           </span>
         </Link>
 
-        <Link
-          href={"/"}
-          className="text-xl font-bold text-primary text-center absolute left-1/2 transform -translate-x-1/2"
-        >
-          Dogepoi
-        </Link>
+        <SearchBar />
 
         <div className="w-[80px] sm:w-[100px]"></div>
       </div>

@@ -61,3 +61,30 @@ export type WatchAnimeResponse<T> = {
   success: boolean;
   data: T;
 };
+
+export interface SearchResult {
+  title: string;
+  link: string;
+  image: string;
+  sinopsis: string;
+  genre: string;
+  producers: string;
+  duration: string;
+  size: string;
+  genres: string[];
+}
+
+export type SearchResponse = {
+  success: boolean;
+  query: string;
+  totalResults: number;
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    nextPageUrl: string | null;
+    previousPageUrl: string | null;
+  };
+  data: SearchResult[];
+};

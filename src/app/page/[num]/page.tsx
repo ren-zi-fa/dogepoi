@@ -1,18 +1,16 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
+import { useParams } from 'next/navigation';
 import useSWR from 'swr';
 import AnimeHentai from "@/components/CardHentai";
 import { AnimeResponse, AnimeResponseData } from "@/types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function AnimePage({
-  params,
-}: {
-  params: { num: string };
-}) {
-  const { num } = params;
+export default function AnimePage() {
+  const params = useParams();
+  const num = params?.num as string;
 
   // Fetch home data
   const { data: hentaiData, error: homeError, isLoading: homeLoading } = useSWR<AnimeResponse<AnimeResponseData>>(
@@ -26,7 +24,7 @@ export default function AnimePage({
 
   // Fetch page data
   const { data: pageData, error: pageError, isLoading: pageLoading } = useSWR(
-    `/api/page/${num}`,
+    num ? `/api/page/${num}` : null,
     fetcher,
     {
       revalidateOnFocus: false,

@@ -1,20 +1,18 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
+import { useParams } from 'next/navigation';
 import useSWR from 'swr';
 import { HentaiDetailCard } from "@/components/DetailCard";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function AnimeDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const { slug } = params;
+export default function AnimeDetailPage() {
+  const params = useParams();
+  const slug = params?.slug as string;
   
   const { data, error, isLoading } = useSWR(
-    `/api/detail/${slug}`,
+    slug ? `/api/detail/${slug}` : null,
     fetcher,
     {
       revalidateOnFocus: false,

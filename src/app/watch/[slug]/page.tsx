@@ -1,21 +1,19 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
-import useSWR from 'swr';
+import { Loader2 } from "lucide-react";
+import { useParams } from 'next/navigation';
+import useSWR from "swr";
 import WatchAnime from "@/components/WatchingHentai";
 import { WatchinAnime } from "@/types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function WatchPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const { slug } = params;
+export default function WatchPage() {
+  const params = useParams();
+  const slug = params?.slug as string;
 
   const { data, error, isLoading } = useSWR(
-    `/api/watch/${slug}`,
+    slug ? `/api/watch/${slug}` : null,
     fetcher,
     {
       revalidateOnFocus: false,

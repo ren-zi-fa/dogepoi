@@ -34,7 +34,7 @@ export default function WatchAnime(props: WatchinAnime) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       {/* Header with better mobile spacing */}
-      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b">
+      <div className="  bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b">
         <div className="container mx-auto px-4 py-3 sm:py-4">
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center text-slate-800 dark:text-slate-100 leading-tight">
             {title}
@@ -100,7 +100,7 @@ export default function WatchAnime(props: WatchinAnime) {
                       </button>
 
                       {isSourceDropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-full sm:w-32 bg-white dark:bg-slate-800 border rounded-md shadow-lg z-30">
+                        <div className="absolute right-0 mt-2 w-full sm:w-32 bg-white dark:bg-slate-800 border rounded-md shadow-lg z-20">
                           {sources_video.map((_, index) => (
                             <button
                               key={index}
@@ -136,7 +136,7 @@ export default function WatchAnime(props: WatchinAnime) {
                         src={sources_video[selectedVideoIndex]}
                         className="w-full h-full border-0"
                         allowFullScreen
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        sandbox="allow-scripts allow-same-origin allow-presentation"
                         title={`Watch ${title} - Source ${
                           selectedVideoIndex + 1
                         }`}

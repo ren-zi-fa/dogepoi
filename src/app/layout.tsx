@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+
 const comicNeue = Comic_Neue({
   subsets: ["latin"],
   variable: "--font-comic-neue",
@@ -39,6 +40,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-background text-foreground">
         <Navbar />
+
         {children}
         <Footer />
       </body>
