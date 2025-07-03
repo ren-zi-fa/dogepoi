@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { handle } from "hono/netlify";
+import { handle } from "hono/vercel";
 import home from "./home";
 import detail from "./detail";
 import watch from "./watch";
@@ -7,15 +7,11 @@ import page from "./pages";
 
 const app = new Hono().basePath("/api");
 
-app.get("/", async (c) => {
-  return c.json({
-    message: "this work",
-  });
-});
+app.get("/", (c) => c.json({ message: "this works" }));
 
-export const routes = app
+const routes = app
   .route("/home", home)
-  .route("/detail/", detail)
+  .route("/detail", detail)
   .route("/watch", watch)
   .route("/page", page);
 
