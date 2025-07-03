@@ -4,8 +4,8 @@ import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import useSWR from 'swr';
 import { HentaiDetailCard } from "@/components/DetailCard";
+import { fetcher } from '@/lib/utils';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function AnimeDetailPage() {
   const params = useParams();

@@ -5,8 +5,8 @@ import { useParams } from 'next/navigation';
 import useSWR from "swr";
 import WatchAnime from "@/components/WatchingHentai";
 import { WatchinAnime } from "@/types";
+import { fetcher } from "@/lib/utils";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function WatchPage() {
   const params = useParams();

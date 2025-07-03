@@ -5,8 +5,9 @@ import { useParams } from 'next/navigation';
 import useSWR from 'swr';
 import AnimeHentai from "@/components/CardHentai";
 import { AnimeResponse, AnimeResponseData } from "@/types";
+import { fetcher } from '@/lib/utils';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 
 export default function AnimePage() {
   const params = useParams();
@@ -22,7 +23,6 @@ export default function AnimePage() {
     }
   );
 
-  // Fetch page data
   const { data: pageData, error: pageError, isLoading: pageLoading } = useSWR(
     num ? `/api/page/${num}` : null,
     fetcher,

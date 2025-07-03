@@ -51,14 +51,13 @@ searchRoute.get("/", async (c) => {
         return p.text().split(":").slice(1).join(":").trim();
       };
 
-      const sinopsis = desc.find("p").first().text().trim(); // fallback awal
+      const sinopsis = desc.find("p").first().text().trim(); 
       const producers = getFieldText("producers");
       const genreText = getFieldText("genre");
 
       const duration = getFieldText("duration");
       const size = getFieldText("size");
 
-      // Pisahkan genre jadi array jika pakai koma
       const genres = genreText
         .split(",")
         .map((g) => g.trim())

@@ -7,12 +7,12 @@ import {
   Building,
   AlertCircle,
   ChevronDown,
-  Maximize2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Separator } from "@radix-ui/react-separator";
 import { WatchinAnime } from "@/types";
 import Image from "next/image";
+import { Skeleton } from "./ui/skeleton";
 
 export default function WatchAnime(props: WatchinAnime) {
   const {
@@ -30,6 +30,7 @@ export default function WatchAnime(props: WatchinAnime) {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
   const [isSourceDropdownOpen, setIsSourceDropdownOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
@@ -49,11 +50,13 @@ export default function WatchAnime(props: WatchinAnime) {
           <div className="xl:col-span-4 2xl:col-span-3">
             <div className="overflow-hidden shadow-xl rounded-lg bg-white dark:bg-slate-800 sticky top-24">
               <div className="relative">
+                {!loaded && <Skeleton className="absolute w-full h-full" />}
                 {image && title && (
                   <Image
                     src={image}
                     alt={title}
                     width={400}
+                    onLoad={() => setLoaded(true)}
                     height={600}
                     className="w-full h-[300px] sm:h-[400px] lg:h-[500px] xl:h-[600px] object-cover"
                   />
@@ -153,13 +156,7 @@ export default function WatchAnime(props: WatchinAnime) {
                     )}
                   </div>
 
-                  {/* Fullscreen button */}
-                  <button
-                    className="absolute top-2 right-2 opacity-75 hover:opacity-100 transition-opacity p-2 bg-black/50 text-white rounded-md"
-                    onClick={() => setIsFullscreen(!isFullscreen)}
-                  >
-                    <Maximize2 className="h-3 w-3 sm:h-4 sm:w-4" />
-                  </button>
+          
                 </div>
 
                 {/* Video Source Info */}

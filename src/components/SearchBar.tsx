@@ -139,7 +139,7 @@ export default function SearchBar() {
       )}
 
       <Select
-        className="pl-8" // padding left agar tidak tertutup X
+        className="pl-8" 
         inputValue={inputValue}
         onInputChange={(value) => setInputValue(value)}
         onKeyDown={handleKeyDown}
@@ -161,7 +161,7 @@ export default function SearchBar() {
           }
         }}
         components={{ Option: CustomOption, DropdownIndicator: () => null }}
-        isClearable={false} // disable bawaan react-select
+        isClearable={false} 
         styles={{
           control: (base) => ({
             ...base,
@@ -169,7 +169,7 @@ export default function SearchBar() {
             borderColor: "#e5e7eb",
             minHeight: "3rem",
             backgroundColor: "#ffffff",
-            paddingLeft: "2rem", // ruang untuk tombol X
+            paddingLeft: "2rem", 
           }),
           input: (base) => ({
             ...base,

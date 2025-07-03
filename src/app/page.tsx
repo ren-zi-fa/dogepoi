@@ -4,8 +4,9 @@ import { Loader2 } from 'lucide-react';
 import useSWR from 'swr';
 import AnimeHentai from "@/components/CardHentai";
 import { AnimeResponse, AnimeResponseData } from "@/types";
+import { fetcher } from '@/lib/utils';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 
 export default function HomePage() {
   const { data, error, isLoading } = useSWR<AnimeResponse<AnimeResponseData>>(

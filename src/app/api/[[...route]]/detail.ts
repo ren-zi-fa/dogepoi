@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import axios from "axios";
 import * as cheerio from "cheerio";
 
-const url_target = process.env.BASE_URL as string; // contoh: https://nekopoi.care/hentai
+const url_target = process.env.BASE_URL as string; 
 const proxy = process.env.PROXY as string;
 
 const detailRoute = new Hono();
@@ -14,7 +14,6 @@ detailRoute.get("/:slug", async (c) => {
     return c.json({ success: false, message: "Missing slug parameter" }, 400);
   }
 
-  // Gabungkan URL target
   const fullTargetUrl = `${url_target.replace(/\/$/, "")}/hentai/${slug}`;
   try {
     const { data: html } = await axios.get(proxy, {
@@ -22,7 +21,7 @@ detailRoute.get("/:slug", async (c) => {
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
         "Accept-Language": "en-US,en;q=0.9",
-        "x-target-url": fullTargetUrl, // pastikan ini target akhir
+        "x-target-url": fullTargetUrl,
       },
       timeout: 60000,
     });

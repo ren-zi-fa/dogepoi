@@ -8,9 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { SearchResponse } from "@/types";
 import PaginationSearch from "@/components/PaginationSearch";
+import { fetcher } from "@/lib/utils";
 
-// fetcher untuk swr
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function SearchResultPage() {
   const searchParams = useSearchParams();

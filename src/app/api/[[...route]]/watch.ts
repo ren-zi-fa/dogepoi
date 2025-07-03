@@ -33,7 +33,7 @@ watchRoute.get("/:slug", async (c) => {
     const container = $(".contentpost");
     const image = container.find(".thm img").attr("src") || "";
 
-    // Ambil semua iframe dari show-stream
+  
     const streamIframes = $("#show-stream iframe")
       .map((i, el) => $(el).attr("src"))
       .get()
