@@ -1,6 +1,6 @@
 [build]
   command = "pnpm build"
-  publish = "out"
+  publish = ".next"
   
 [build.environment]
   NEXT_PUBLIC_URL = "https://dogepoi.netlify.app"
