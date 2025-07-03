@@ -1,11 +1,12 @@
 [build]
   command = "npm run build"
+  publish = ".next" # jika pakai Next.js
   functions = "netlify/functions"
-  publish = "public" # ganti jika kamu pakai Next.js (biasanya ".next" atau "out")
 
-[dev]
-  functions = "netlify/functions"
-  framework = "#custom"
+[build.environment]
+  NEXT_PUBLIC_URL = "https://dogepoi.netlify.app"
+  MY_URL = "https://dogepoi.netlify.app"
+  PROXY = "https://my-proxy-production.up.railway.app"
 
 [[redirects]]
   from = "/api/*"
