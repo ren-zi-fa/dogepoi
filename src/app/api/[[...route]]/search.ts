@@ -10,13 +10,15 @@ const searchRoute = new Hono();
 
 searchRoute.get("/", async (c) => {
   const slug = c.req.query("q");
+  const page = c.req.query("page");
 
   if (!slug) {
     return c.json({ success: false, message: "Missing search parameter" }, 400);
   }
 
-  const fullTargetUrl = `${url_target.replace(/\/$/, "")}/search/${slug}`;
-
+  const base = `${url_target.replace(/\/$/, "")}/search/${slug}`;
+  const fullTargetUrl = page ? `${base}/page/${page}` : base;
+  
   try {
     const { data: html } = await axios.get(proxy, {
       headers: {

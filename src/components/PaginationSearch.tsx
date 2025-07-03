@@ -10,11 +10,10 @@ export default function PaginationSearch({
   query: string;
 }) {
   const router = useRouter();
-
-  const { currentPage, totalPages } = pagination;
+  const { currentPage, totalPages, hasNextPage, hasPreviousPage, nextPageUrl, previousPageUrl } = pagination;
 
   const getPageNumbers = () => {
-    const pages = [];
+    const pages: (number | string)[] = [];
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) pages.push(i);
     } else {
@@ -31,12 +30,37 @@ export default function PaginationSearch({
 
   const handlePageClick = (page: number | string) => {
     if (typeof page === "number") {
-      router.push(`/search/${encodeURIComponent(query)}/page=${page}`);
+      router.push(`/search?q=${encodeURIComponent(query)}&page=${page}`);
     }
   };
 
+const extractPageNumber = (urlStr: string | null, fallback: number): number => {
+  if (!urlStr) return Math.max(fallback, 1); // Jangan biarkan page=0
+  try {
+    const url = new URL(urlStr, "http://dummy");
+    const page = url.searchParams.get("page");
+    const pageNum = Number(page);
+    return !isNaN(pageNum) && pageNum > 0 ? pageNum : Math.max(fallback, 1);
+  } catch {
+    return Math.max(fallback, 1);
+  }
+};
+
   return (
     <div className="flex justify-center items-center gap-2 flex-wrap mt-6">
+      {hasPreviousPage && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            const prevPage = extractPageNumber(previousPageUrl, currentPage - 1);
+            router.push(`/search?q=${encodeURIComponent(query)}&page=${prevPage}`);
+          }}
+        >
+          Prev
+        </Button>
+      )}
+
       {getPageNumbers().map((page, index) =>
         typeof page === "number" ? (
           <Button
@@ -54,19 +78,13 @@ export default function PaginationSearch({
         )
       )}
 
-      {pagination.hasNextPage && pagination.nextPageUrl && (
+      {hasNextPage && (
         <Button
           variant="ghost"
           size="sm"
           onClick={() => {
-            const url = new URL(
-              pagination.nextPageUrl as string,
-              "http://dummy"
-            );
-            const nextPage = url.searchParams.get("page");
-            router.push(
-              `/search/${encodeURIComponent(query)}/page=${nextPage}`
-            );
+            const nextPage = extractPageNumber(nextPageUrl, currentPage + 1);
+            router.push(`/search?q=${encodeURIComponent(query)}&page=${nextPage}`);
           }}
         >
           Next
