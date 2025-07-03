@@ -1,31 +1,78 @@
+'use client';
+
+import { Loader2 } from 'lucide-react';
+import useSWR from 'swr';
 import AnimeHentai from "@/components/CardHentai";
 import { AnimeResponse, AnimeResponseData } from "@/types";
 
-const server_url = process.env.NEXT_PUBLIC_URL;
-export default async function AnimePage({
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+export default function AnimePage({
   params,
 }: {
-  params: Promise<{ num: string }>;
+  params: { num: string };
 }) {
-  const { num } = await params;
+  const { num } = params;
 
-  const resHome = await fetch(`${server_url}/api/home`, {
-    next: { revalidate: 3600 },
-  });
-  const hentai: AnimeResponse<AnimeResponseData> = await resHome.json();
+  // Fetch home data
+  const { data: hentaiData, error: homeError, isLoading: homeLoading } = useSWR<AnimeResponse<AnimeResponseData>>(
+    '/api/home',
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+    }
+  );
 
-  const resPage = await fetch(`${process.env.MY_URL}/api/page/${num}`);
-  if (!resPage.ok) {
-    return <div>Gagal memuat data</div>;
+  // Fetch page data
+  const { data: pageData, error: pageError, isLoading: pageLoading } = useSWR(
+    `/api/page/${num}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+    }
+  );
+
+  const isLoading = homeLoading || pageLoading;
+  const error = homeError || pageError;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+          <p className="text-gray-600">Memuat halaman {num}...</p>
+        </div>
+      </div>
+    );
   }
 
-  const pageJson = await resPage.json();
-  const episodeTerbaru = pageJson?.data?.episodeTerbaru ?? [];
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-red-500 text-lg">Gagal memuat data</p>
+          <p className="text-gray-500 text-sm mt-2">Silakan coba lagi nanti</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!hentaiData || !pageData) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500">Tidak ada data tersedia</p>
+      </div>
+    );
+  }
+
+  const episodeTerbaru = pageData?.data?.episodeTerbaru ?? [];
 
   return (
     <div className="mt-10">
       <AnimeHentai
-        hentaiTerbaru={hentai.data.hentaiTerbaru}
+        hentaiTerbaru={hentaiData.data.hentaiTerbaru}
         episodeTerbaru={episodeTerbaru}
       />
     </div>

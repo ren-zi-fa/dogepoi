@@ -1,20 +1,60 @@
+'use client';
+
+import { Loader2 } from 'lucide-react';
+import useSWR from 'swr';
 import { HentaiDetailCard } from "@/components/DetailCard";
-export default async function AnimeDetail({
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+export default function AnimeDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }) {
-  const slug = (await params).slug;
-  const res = await fetch(`${process.env.MY_URL}/api/detail/${slug}`);
+  const { slug } = params;
+  
+  const { data, error, isLoading } = useSWR(
+    `/api/detail/${slug}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+    }
+  );
 
-  if (!res.ok) return <div>Gagal memuat data</div>;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+          <p className="text-gray-600">Memuat detail anime...</p>
+        </div>
+      </div>
+    );
+  }
 
-  const json = await res.json();
-  const data = json.data;
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-red-500 text-lg">Gagal memuat data</p>
+          <p className="text-gray-500 text-sm mt-2">Silakan coba lagi nanti</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data || !data.data) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500">Detail tidak ditemukan</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
-      <HentaiDetailCard data={data} />
+      <HentaiDetailCard data={data.data} />
     </div>
   );
 }
