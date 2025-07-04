@@ -1,5 +1,3 @@
-/*  eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Hono } from "hono";
 import axios from "axios";
 import * as cheerio from "cheerio";
@@ -115,7 +113,7 @@ comingSoonRoute.get("/", async (c) => {
         let thumbnail = "";
         let producer = "";
         let releaseDate = "";
-        let subIndo = "";
+
 
         // Extract from any h2 with title
         $el.find("h2").each((_, h2) => {

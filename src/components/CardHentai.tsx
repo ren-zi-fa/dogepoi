@@ -1,7 +1,6 @@
 "use client";
 
 import { EpisodeItem, HentaiItem } from "@/types";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import HentaiTerbaru from "./HentaiTerbaru";
