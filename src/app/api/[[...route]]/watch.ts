@@ -15,7 +15,7 @@ watchRoute.get("/:slug", async (c) => {
   }
 
   const fullTargetUrl = `${url_target.replace(/\/$/, "")}/${slug}`;
-  console.log("Target:", fullTargetUrl);
+
 
   try {
     const { data: html } = await axios.get(proxy, {
@@ -33,7 +33,6 @@ watchRoute.get("/:slug", async (c) => {
     const container = $(".contentpost");
     const image = container.find(".thm img").attr("src") || "";
 
-  
     const streamIframes = $("#show-stream iframe")
       .map((i, el) => $(el).attr("src"))
       .get()
@@ -75,6 +74,20 @@ watchRoute.get("/:slug", async (c) => {
       .trim();
 
     const note = container.find("h3:contains('Catatan')").text().trim();
+    const downloadSections = $(".arealinker .boxdownload .liner")
+      .map((_, el) => {
+        const resolution = $(el).find(".name").text().trim();
+        const links = $(el)
+          .find(".listlink p a")
+          .map((_, a) => {
+            const name = $(a).text().trim();
+            const url = $(a).attr("href") || "";
+            return { name, url };
+          })
+          .get();
+        return { resolution, links };
+      })
+      .get();
 
     return c.json({
       success: true,
@@ -88,6 +101,7 @@ watchRoute.get("/:slug", async (c) => {
         duration,
         size: sizeText,
         note,
+        download_links: downloadSections,
       },
     });
   } catch (err) {

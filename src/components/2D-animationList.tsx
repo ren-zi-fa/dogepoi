@@ -6,6 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Category2DAnimation, AnimeResponse } from "@/types";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useBookmarkStore } from "@/store/useBookMarkStore";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 
 interface Props {
   response: AnimeResponse<Category2DAnimation[]>;
@@ -17,7 +19,7 @@ export default function List2D({ response, basePath }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page") || "1");
-
+  const { toggleBookmark, isBookmarked } = useBookmarkStore();
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     if (page === 1) {
@@ -78,6 +80,8 @@ export default function List2D({ response, basePath }: Props) {
         {response.data.map((item, idx) => {
           const url = item.url;
           const slug = url.replace("https://nekopoi.care/", "");
+          const bookmarked = isBookmarked(item.title);
+
           return (
             <Card key={idx} className="overflow-hidden shadow-md">
               <Link href={`/watch/${slug}`}>
@@ -101,6 +105,23 @@ export default function List2D({ response, basePath }: Props) {
                 <p className="text-xs text-slate-500">
                   Producer: {item.producers}
                 </p>
+                <button
+                  onClick={() =>
+                    toggleBookmark({
+                      title: item.title,
+                      url: `/watch/${slug}`,
+                      image: item.thumbnail,
+                    })
+                  }
+                  className="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+                  title={bookmarked ? "Remove Bookmark" : "Add Bookmark"}
+                >
+                  {bookmarked ? (
+                    <BookmarkCheck className="w-6 h-6 md:w-10 md:h-10 text-yellow-500" />
+                  ) : (
+                    <Bookmark className="w-6 h-6 md:w-10 md:h-10 text-slate-400" />
+                  )}
+                </button>
               </CardContent>
             </Card>
           );

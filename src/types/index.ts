@@ -36,6 +36,16 @@ export interface AnimeDetail {
   episodes: Episode[];
 }
 
+interface DownloadLink {
+  name: string;
+  url: string;
+}
+
+interface DownloadSection {
+  resolution: string;
+  links: DownloadLink[];
+}
+
 export interface WatchinAnime {
   duration?: string;
   genres?: string[];
@@ -46,6 +56,7 @@ export interface WatchinAnime {
   size?: string;
   sources_video?: string[];
   title?: string;
+  download_links: DownloadSection[];
 }
 
 export interface SearchResult {
@@ -121,6 +132,4 @@ export interface ComingSoonItem {
   thumbnail: string;
   producer: string;
   releaseDate: string;
-
 }
-

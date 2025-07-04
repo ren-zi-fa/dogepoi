@@ -7,6 +7,8 @@ import Image from "next/image";
 import { CategoryHentai, AnimeResponse } from "@/types";
 import { useSearchParams, useRouter } from "next/navigation";
 import LoadingSkeleton from "./SkeletonResult";
+import { Bookmark, BookmarkCheck } from "lucide-react";
+import { useBookmarkStore } from "@/store/useBookMarkStore";
 
 interface Props {
   response: AnimeResponse<CategoryHentai[]>;
@@ -19,6 +21,7 @@ export default function HentaiCardList({
   basePath,
   isLoading,
 }: Props) {
+  const { toggleBookmark, isBookmarked } = useBookmarkStore();
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page") || "1");
@@ -36,7 +39,7 @@ export default function HentaiCardList({
   const getPageNumbers = () => {
     const totalPages = response.pagination?.totalPages || 1;
     const current = currentPage;
-    const delta = 2; // Jumlah halaman di kiri dan kanan halaman aktif
+    const delta = 2;
 
     let pages: (number | string)[] = [];
 
@@ -48,39 +51,29 @@ export default function HentaiCardList({
       const start = Math.max(2, current - delta);
       const end = Math.min(totalPages - 1, current + delta);
 
-      if (start > 2) {
-        pages.push("...");
-      }
+      if (start > 2) pages.push("...");
 
-      for (let i = start; i <= end; i++) {
-        pages.push(i);
-      }
+      for (let i = start; i <= end; i++) pages.push(i);
 
-      if (end < totalPages - 1) {
-        pages.push("...");
-      }
+      if (end < totalPages - 1) pages.push("...");
 
-      if (totalPages > 1) {
-        pages.push(totalPages);
-      }
+      if (totalPages > 1) pages.push(totalPages);
     }
 
     return pages;
   };
-  if (isLoading) {
-    return <LoadingSkeleton />;
-  }
+
+  if (isLoading) return <LoadingSkeleton />;
+
   return (
     <div className="space-y-6">
-      {/* List Card */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 container mx-auto px-4 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 container mx-auto px-4">
         {response.data.map((item, idx) => {
-          const url = item.url;
-
-          const slug = url.replace("https://nekopoi.care/", "");
+          const slug = item.url.replace("https://nekopoi.care/", "");
+          const bookmarked = isBookmarked(item.title);
 
           return (
-            <Card key={idx} className="overflow-hidden shadow-md">
+            <Card key={idx} className="overflow-hidden shadow-md relative">
               <Link href={`/watch/${slug}`}>
                 <Image
                   src={item.thumbnail}
@@ -92,6 +85,7 @@ export default function HentaiCardList({
                   className="w-full h-48 object-cover"
                 />
               </Link>
+
               <CardContent className="p-4 space-y-2">
                 <Link href={`/watch/${slug}`}>
                   <h3 className="font-semibold text-lg line-clamp-2">
@@ -114,6 +108,26 @@ export default function HentaiCardList({
                   Producer: {item.producers}
                 </p>
               </CardContent>
+
+              {/* Bookmark Button (absolute positioned) */}
+              <button
+                onClick={() =>
+                  toggleBookmark({
+                    title: item.title,
+                    url: `/watch/${slug}`,
+                    image: item.thumbnail,
+                    sinopsis: item.synopsis,
+                  })
+                }
+                className="absolute top-2 right-2 bg-white dark:bg-slate-900 rounded-full p-1 shadow hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+                title={bookmarked ? "Remove Bookmark" : "Add Bookmark"}
+              >
+                {bookmarked ? (
+                  <BookmarkCheck className="w-5 h-5 text-yellow-500" />
+                ) : (
+                  <Bookmark className="w-5 h-5 text-slate-400" />
+                )}
+              </button>
             </Card>
           );
         })}
@@ -122,7 +136,6 @@ export default function HentaiCardList({
       {/* Pagination */}
       {response.pagination && response.pagination.totalPages > 1 && (
         <div className="flex flex-wrap justify-center items-center gap-2 mt-4">
-          {/* Previous Button */}
           <Button
             variant="outline"
             size="sm"
@@ -132,12 +145,11 @@ export default function HentaiCardList({
             Previous
           </Button>
 
-          {/* Page Numbers */}
           {getPageNumbers().map((page, index) => (
             <div key={index}>
               {page === "..." ? (
                 <span className="px-2 py-1 text-sm text-muted-foreground">
-                  ...
+                  …
                 </span>
               ) : (
                 <Button
@@ -151,7 +163,6 @@ export default function HentaiCardList({
             </div>
           ))}
 
-          {/* Next Button */}
           <Button
             variant="outline"
             size="sm"

@@ -26,7 +26,7 @@ pageRoute.get("/:halaman", async (c) => {
   }
 
   const fullTargetUrl = `${target_url.replace(/\/$/, "")}/page/${halaman}`;
-  console.log(fullTargetUrl);
+
 
   try {
     const response = await axios.get(proxy, {

@@ -7,13 +7,15 @@ import {
   Building,
   AlertCircle,
   ChevronDown,
+  BookmarkCheck,
+  Bookmark,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Separator } from "@radix-ui/react-separator";
 import { WatchinAnime } from "@/types";
 import Image from "next/image";
 import { Skeleton } from "./ui/skeleton";
-
+import { useBookmarkStore } from "@/store/useBookMarkStore";
 
 export default function WatchAnime(props: WatchinAnime) {
   const {
@@ -26,7 +28,10 @@ export default function WatchAnime(props: WatchinAnime) {
     size,
     sources_video,
     title,
+    download_links,
   } = { ...props };
+  const { toggleBookmark, isBookmarked } = useBookmarkStore();
+  const bookmarked = isBookmarked(title ?? "");
 
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
   const [isSourceDropdownOpen, setIsSourceDropdownOpen] = useState(false);
@@ -37,9 +42,29 @@ export default function WatchAnime(props: WatchinAnime) {
       {/* Header with better mobile spacing */}
       <div className="  bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b">
         <div className="container mx-auto px-4 py-3 sm:py-4">
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center text-slate-800 dark:text-slate-100 leading-tight">
-            {title}
-          </h1>
+          <div className="flex items-center justify-center gap-3">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center text-slate-800 dark:text-slate-100 leading-tight">
+              {title}
+            </h1>
+            <button
+              onClick={() =>
+                toggleBookmark({
+                  title: title ?? "",
+                  url: `/watch/${title}`,
+                  image: image ?? "",
+                  sinopsis: sinopsis,
+                })
+              }
+              className="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+              title={bookmarked ? "Remove Bookmark" : "Add Bookmark"}
+            >
+              {bookmarked ? (
+                <BookmarkCheck className="w-6 h-6 md:w-10 md:h-10 text-yellow-500" />
+              ) : (
+                <Bookmark className="w-6 h-6 md:w-10 md:h-10 text-slate-400" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -168,7 +193,38 @@ export default function WatchAnime(props: WatchinAnime) {
                 )}
               </div>
             </div>
-
+            {/* Download Links Card */}
+            {download_links && download_links.length > 0 && (
+              <div className="shadow-md hover:shadow-lg transition-shadow rounded-lg bg-white dark:bg-slate-800">
+                <div className="p-4 sm:p-6 pb-3 border-b border-slate-200 dark:border-slate-700">
+                  <h3 className="text-base sm:text-lg font-semibold">
+                    Download Links
+                  </h3>
+                </div>
+                <div className="p-4 sm:p-6 space-y-4">
+                  {download_links.map((section, idx) => (
+                    <div key={idx}>
+                      <p className="font-medium text-sm text-slate-700 dark:text-slate-300 mb-2">
+                        {section.resolution}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {section.links.map((link, i) => (
+                          <a
+                            key={i}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded-full transition-colors"
+                          >
+                            {link.name}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             {/* Enhanced Info Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Details Card */}
@@ -241,7 +297,6 @@ export default function WatchAnime(props: WatchinAnime) {
                 )}
             </div>
 
-            {/* Synopsis Card */}
             <div className="shadow-md hover:shadow-lg transition-shadow rounded-lg bg-white dark:bg-slate-800">
               <div className="p-4 sm:p-6 pb-3 sm:pb-4 border-b border-slate-200 dark:border-slate-700">
                 <h3 className="text-base sm:text-lg font-semibold">Synopsis</h3>
@@ -252,7 +307,6 @@ export default function WatchAnime(props: WatchinAnime) {
                 </p>
               </div>
             </div>
-
             {/* Note Card */}
             {note && (
               <div className="shadow-md border border-amber-200 bg-amber-50 dark:bg-amber-950 dark:border-amber-800 hover:shadow-lg transition-shadow rounded-lg">
