@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html suppressHydrationWarning>
       <head>
         {/* Google Analytics - gunakan lazyOnload untuk menghindari hydration issues */}
         <Script
@@ -41,12 +41,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${comicNeue.variable}`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light" // Hindari "system" untuk menghindari hydration error
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute="class" enableSystem>
           <Navbar />
           <SecondNavbar />
           {children}

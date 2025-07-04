@@ -1,19 +1,44 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { SearchResponse } from "@/types";
 import { useRouter } from "next/navigation";
 
-export default function PaginationSearch({
-  pagination,
-  query,
-}: {
+type Props = {
   pagination: SearchResponse["pagination"];
   query: string;
-}) {
-  const router = useRouter();
-  const { currentPage, totalPages, hasNextPage, hasPreviousPage, nextPageUrl, previousPageUrl } = pagination;
+};
 
-  const getPageNumbers = () => {
+export default function PaginationSearch({ pagination, query }: Props) {
+  const router = useRouter();
+  const {
+    currentPage,
+    totalPages,
+    hasNextPage,
+    hasPreviousPage,
+    nextPageUrl,
+    previousPageUrl,
+  } = pagination;
+
+  // Fungsi bantu: parsing nomor halaman dari URL
+  const extractPageNumber = (
+    urlStr: string | null | undefined,
+    fallback: number
+  ): number => {
+    if (!urlStr) return Math.max(fallback, 1);
+    try {
+      const url = new URL(urlStr, "http://dummy");
+      const page = Number(url.searchParams.get("page"));
+      return !isNaN(page) && page > 0 ? page : Math.max(fallback, 1);
+    } catch {
+      return Math.max(fallback, 1);
+    }
+  };
+
+  // Fungsi bantu: menentukan halaman yang akan ditampilkan
+  const getPageNumbers = (): (number | string)[] => {
     const pages: (number | string)[] = [];
+
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) pages.push(i);
     } else {
@@ -25,42 +50,31 @@ export default function PaginationSearch({
         pages.push(1, "...", currentPage, "...", totalPages);
       }
     }
+
     return pages;
   };
 
-  const handlePageClick = (page: number | string) => {
-    if (typeof page === "number") {
-      router.push(`/search?q=${encodeURIComponent(query)}&page=${page}`);
-    }
+  // Navigasi halaman
+  const handlePageClick = (page: number) => {
+    router.push(`/search?q=${encodeURIComponent(query)}&page=${page}`);
   };
-
-const extractPageNumber = (urlStr: string | null, fallback: number): number => {
-  if (!urlStr) return Math.max(fallback, 1); // Jangan biarkan page=0
-  try {
-    const url = new URL(urlStr, "http://dummy");
-    const page = url.searchParams.get("page");
-    const pageNum = Number(page);
-    return !isNaN(pageNum) && pageNum > 0 ? pageNum : Math.max(fallback, 1);
-  } catch {
-    return Math.max(fallback, 1);
-  }
-};
 
   return (
     <div className="flex justify-center items-center gap-2 flex-wrap mt-6">
+      {/* Tombol Previous */}
       {hasPreviousPage && (
         <Button
-          variant="default"
+          variant="outline"
           size="sm"
-          onClick={() => {
-            const prevPage = extractPageNumber(previousPageUrl, currentPage - 1);
-            router.push(`/search?q=${encodeURIComponent(query)}&page=${prevPage}`);
-          }}
+          onClick={() =>
+            handlePageClick(extractPageNumber(previousPageUrl, currentPage - 1))
+          }
         >
           Prev
         </Button>
       )}
 
+      {/* Nomor Halaman */}
       {getPageNumbers().map((page, index) =>
         typeof page === "number" ? (
           <Button
@@ -78,14 +92,14 @@ const extractPageNumber = (urlStr: string | null, fallback: number): number => {
         )
       )}
 
+      {/* Tombol Next */}
       {hasNextPage && (
         <Button
-          variant="default"
+          variant="outline"
           size="sm"
-          onClick={() => {
-            const nextPage = extractPageNumber(nextPageUrl, currentPage + 1);
-            router.push(`/search?q=${encodeURIComponent(query)}&page=${nextPage}`);
-          }}
+          onClick={() =>
+            handlePageClick(extractPageNumber(nextPageUrl, currentPage + 1))
+          }
         >
           Next
         </Button>

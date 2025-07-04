@@ -15,37 +15,36 @@ export default function SearchResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const query = searchParams.get("q");
-
-  // Validasi page harus angka dan > 0
+  const query = searchParams.get("q")?.trim() || "";
   const rawPage = searchParams.get("page");
   const page =
-    rawPage && /^\d+$/.test(rawPage) && parseInt(rawPage) > 0 ? rawPage : null;
+    rawPage && /^\d+$/.test(rawPage) && parseInt(rawPage) > 0
+      ? parseInt(rawPage)
+      : 1;
 
   const queryString =
-    query && query.trim() !== ""
-      ? `/api/search?q=${encodeURIComponent(query)}${
-          page ? `&page=${page}` : ""
-        }`
-      : null;
+    query !== "" ? `/api/search?q=${encodeURIComponent(query)}&page=${page}` : null;
 
   const { data, error, isLoading } = useSWR<SearchResponse>(
     queryString,
     fetcher,
-    {
-      suspense: false,
-    }
+    { suspense: false }
   );
 
-  // Redirect ke page pertama jika tidak ada hasil di page besar
+  // Redirect ke page pertama jika tidak ada hasil dan bukan di page 1
   useEffect(() => {
-    if (!data || !Array.isArray(data.data) || data.data.length === 0) {
-      router.replace(`/search?q=${encodeURIComponent(query || "")}`);
+    if (
+      data &&
+      Array.isArray(data.data) &&
+      data.data.length === 0 &&
+      page > 1
+    ) {
+      router.replace(`/search?q=${encodeURIComponent(query)}`);
     }
   }, [data, page, query, router]);
 
-  // UI handling
-  if (!query || query.trim() === "") {
+  // === UI RENDER ===
+  if (!query) {
     return <p className="text-center mt-10">Masukkan kata kunci pencarian.</p>;
   }
 
@@ -111,7 +110,9 @@ export default function SearchResultPage() {
         );
       })}
 
-      <PaginationSearch pagination={data.pagination} query={query} />
+      {data.pagination && (
+        <PaginationSearch pagination={data.pagination} query={query} />
+      )}
     </div>
   );
 }
