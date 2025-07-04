@@ -92,3 +92,35 @@ export interface AnimeResponse<T> {
     totalPages: number;
   };
 }
+
+export interface Category2DAnimation {
+  title: string;
+  url: string;
+  thumbnail: string;
+  producers: string;
+}
+export interface CategoryHentai {
+  title: string;
+  url: string;
+  thumbnail: string;
+  synopsis: string;
+  genres: string[];
+  producers: string;
+}
+export interface Category3Dhentai {
+  title: string;
+  url: string;
+  thumbnail: string;
+  producers: string;
+}
+
+export interface ComingSoonItem {
+  title: string;
+  episode: string;
+  url: string;
+  thumbnail: string;
+  producer: string;
+  releaseDate: string;
+
+}
+

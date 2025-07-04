@@ -25,7 +25,7 @@ export const HentaiDetailCard = ({ data }: Props) => {
             src={data.image}
             alt={data.title}
             width={204}
-            height={300}
+            height={200}
             unoptimized
             referrerPolicy="no-referrer"
             className="rounded-lg shadow-md object-cover"
@@ -55,7 +55,12 @@ export const HentaiDetailCard = ({ data }: Props) => {
             ))}
           </div>
 
-          <h3 className="font-semibold text-lg mt-6 mb-2">Episode </h3>
+          {data.episodes.length === 0 ? (
+            <h3 className="font-semibold text-lg mt-6 mb-2">Belum dirilis</h3>
+          ) : (
+            <h3 className="font-semibold text-lg mt-6 mb-2">Episode</h3>
+          )}
+
           {data.episodes.map((item, index) => {
             const url = item.link;
             const slug = url.replace("https://nekopoi.care/", "");

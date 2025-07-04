@@ -13,7 +13,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { WatchinAnime } from "@/types";
 import Image from "next/image";
 import { Skeleton } from "./ui/skeleton";
-import Link from "next/link";
+
 
 export default function WatchAnime(props: WatchinAnime) {
   const {
@@ -55,6 +55,8 @@ export default function WatchAnime(props: WatchinAnime) {
                   <Image
                     src={image}
                     alt={title}
+                    unoptimized
+                    referrerPolicy="no-referrer"
                     width={400}
                     onLoad={() => setLoaded(true)}
                     height={600}
@@ -97,7 +99,7 @@ export default function WatchAnime(props: WatchinAnime) {
                         }
                       >
                         <span className="text-xs sm:text-sm">
-                          Source {selectedVideoIndex + 1}
+                          Server {selectedVideoIndex + 1}
                         </span>
                         <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
                       </button>
@@ -117,7 +119,7 @@ export default function WatchAnime(props: WatchinAnime) {
                                 setIsSourceDropdownOpen(false);
                               }}
                             >
-                              Source {index + 1}
+                              server {index + 1}
                             </button>
                           ))}
                         </div>
@@ -144,7 +146,6 @@ export default function WatchAnime(props: WatchinAnime) {
                           selectedVideoIndex + 1
                         }`}
                       />
-         
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <div className="text-center p-4">
@@ -224,16 +225,16 @@ export default function WatchAnime(props: WatchinAnime) {
                           .filter(
                             (genre) => genre && String(genre).trim() !== ""
                           )
-                          .map((genre, index) => (
-                            <Link
-                              href={`/genre/${genre}`}
-                              key={`genre-${index}`}
-                            >
-                              <span className="inline-block bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs px-2 py-1 rounded-full hover:bg-blue-500 hover:text-white transition-colors cursor-pointer">
-                                {genre}
-                              </span>
-                            </Link>
-                          ))}
+
+                          .map((genre, index) => {
+                            return (
+                              <p key={`genre-${index}`}>
+                                <span className="inline-block bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs px-2 py-1 rounded-full hover:bg-blue-500 hover:text-white transition-colors ">
+                                  {genre}
+                                </span>
+                              </p>
+                            );
+                          })}
                       </div>
                     </div>
                   </div>
@@ -263,7 +264,7 @@ export default function WatchAnime(props: WatchinAnime) {
                         Important Note
                       </p>
                       <p className="text-xs sm:text-sm text-amber-700 dark:text-amber-300 leading-relaxed">
-                        {note}
+                        {note} dan kadang kadang ga bisa ke load karena CSP
                       </p>
                     </div>
                   </div>

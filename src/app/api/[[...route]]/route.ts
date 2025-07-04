@@ -8,6 +8,8 @@ import search from "./search";
 import genre from "./genre";
 import genreList from "./genre-list";
 import hentai from "./hentai";
+import category from "./category";
+import comingsoon from "./comingsoon";
 
 const app = new Hono().basePath("/api");
 
@@ -21,7 +23,9 @@ export const routes = app
   .route("/search", search)
   .route("/genre", genre)
   .route("/genre-list", genreList)
-  .route("/hentai", hentai);
+  .route("/hentai", hentai)
+  .route("/category", category)
+  .route("/coming-soon", comingsoon);
 
 export const GET = handle(app);
 export const POST = handle(app);

@@ -158,7 +158,7 @@ export default function SearchBar() {
         onKeyDown={handleKeyDown}
         options={options}
         isLoading={loading}
-        placeholder="enter untuk search...."
+        placeholder="Enter untuk search...."
         noOptionsMessage={() =>
           loading
             ? "Mencari..."

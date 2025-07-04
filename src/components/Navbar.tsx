@@ -6,8 +6,8 @@ import SearchBar from "./SearchBar";
 
 export default function Navbar() {
   return (
-    <header className="w-full bg-background shadow-sm">
-      <div className="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+    <header className=" bg-background shadow-sm">
+      <div className="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2 dark:bg-gray-800 rounded-t-xl">
         {/* Logo + Title */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
@@ -25,16 +25,6 @@ export default function Navbar() {
         {/* Search bar */}
         <div className="flex-1 min-w-[200px] max-w-md">
           <SearchBar />
-        </div>
-
-        {/* Genre link */}
-        <div className="flex-shrink-0">
-          <Link
-            href="/genre-list"
-            className="text-sm font-medium text-blue-600 hover:underline"
-          >
-            Genre List
-          </Link>
         </div>
       </div>
     </header>
