@@ -6,6 +6,15 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+function slugify(text: string) {
+  return decodeURIComponent(text)
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/--+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 
 export default function BookmarkPage() {
   const { bookmarks, toggleBookmark } = useBookmarkStore();
@@ -30,13 +39,16 @@ export default function BookmarkPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
             {bookmarks.map((anime, idx) => {
+                console.log(anime.url)
+              const title = anime.title;
+              const slug = slugify(title);
               return (
                 <Card
                   key={idx}
                   className="shadow-lg hover:shadow-xl transition-shadow overflow-hidden bg-white dark:bg-slate-800 relative"
                 >
                   {/* Image */}
-                  <Link href={`/watch/${anime.title}`}>
+                  <Link href={`/watch/${slug}`}>
                     <Image
                       src={anime.image}
                       alt={anime.title}
@@ -61,7 +73,7 @@ export default function BookmarkPage() {
 
                   <CardHeader>
                     <CardTitle className="text-base sm:text-lg line-clamp-2">
-                      <Link href={`/watch/${anime.title}`}>{anime.title}</Link>
+                      <Link href={`/watch/${slug}`}>{anime.title}</Link>
                     </CardTitle>
                   </CardHeader>
 
