@@ -13,6 +13,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { WatchinAnime } from "@/types";
 import Image from "next/image";
 import { Skeleton } from "./ui/skeleton";
+import Link from "next/link";
 
 export default function WatchAnime(props: WatchinAnime) {
   const {
@@ -138,11 +139,12 @@ export default function WatchAnime(props: WatchinAnime) {
                         src={sources_video[selectedVideoIndex]}
                         className="w-full h-full border-0"
                         allowFullScreen
-                        sandbox="allow-scripts allow-same-origin allow-presentation"
+                        sandbox="allow-scripts allow-same-origin "
                         title={`Watch ${title} - Source ${
                           selectedVideoIndex + 1
                         }`}
                       />
+         
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <div className="text-center p-4">
@@ -154,8 +156,6 @@ export default function WatchAnime(props: WatchinAnime) {
                       </div>
                     )}
                   </div>
-
-          
                 </div>
 
                 {/* Video Source Info */}
@@ -225,12 +225,14 @@ export default function WatchAnime(props: WatchinAnime) {
                             (genre) => genre && String(genre).trim() !== ""
                           )
                           .map((genre, index) => (
-                            <span
+                            <Link
+                              href={`/genre/${genre}`}
                               key={`genre-${index}`}
-                              className="inline-block bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs px-2 py-1 rounded-full hover:bg-blue-500 hover:text-white transition-colors cursor-default"
                             >
-                              {String(genre).trim()}
-                            </span>
+                              <span className="inline-block bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs px-2 py-1 rounded-full hover:bg-blue-500 hover:text-white transition-colors cursor-pointer">
+                                {genre}
+                              </span>
+                            </Link>
                           ))}
                       </div>
                     </div>

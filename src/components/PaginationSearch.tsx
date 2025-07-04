@@ -50,7 +50,7 @@ const extractPageNumber = (urlStr: string | null, fallback: number): number => {
     <div className="flex justify-center items-center gap-2 flex-wrap mt-6">
       {hasPreviousPage && (
         <Button
-          variant="ghost"
+          variant="default"
           size="sm"
           onClick={() => {
             const prevPage = extractPageNumber(previousPageUrl, currentPage - 1);
@@ -80,7 +80,7 @@ const extractPageNumber = (urlStr: string | null, fallback: number): number => {
 
       {hasNextPage && (
         <Button
-          variant="ghost"
+          variant="default"
           size="sm"
           onClick={() => {
             const nextPage = extractPageNumber(nextPageUrl, currentPage + 1);

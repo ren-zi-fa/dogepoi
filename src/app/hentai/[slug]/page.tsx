@@ -3,16 +3,16 @@
 import { Loader2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import WatchAnime from "@/components/WatchingHentai";
-import { AnimeResponse, WatchinAnime } from "@/types";
+import { HentaiDetailCard } from "@/components/DetailCard";
 import { fetcher } from "@/lib/utils";
+import { AnimeDetail, AnimeResponse } from "@/types";
 
-export default function WatchPage() {
+export default function HentaiPage() {
   const params = useParams();
   const slug = params?.slug as string;
 
-  const { data, error, isLoading } = useSWR<AnimeResponse<WatchinAnime>>(
-    slug ? `/api/watch/${slug}` : null,
+  const { data, error, isLoading } = useSWR<AnimeResponse<AnimeDetail>>(
+    slug ? `/api/hentai/${slug}` : null,
     fetcher,
     {
       revalidateOnFocus: false,
@@ -20,12 +20,13 @@ export default function WatchPage() {
     }
   );
 
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-          <p className="text-gray-600">Memuat player...</p>
+          <p className="text-gray-600">Memuat hentai...</p>
         </div>
       </div>
     );
@@ -45,16 +46,14 @@ export default function WatchPage() {
   if (!data || !data.data) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-gray-500">Episode tidak ditemukan</p>
+        <p className="text-gray-500">Detail tidak ditemukan</p>
       </div>
     );
   }
 
-  const watchData = data.data as WatchinAnime;
-
   return (
-    <div className="mt-10">
-      <WatchAnime {...watchData} />
+    <div className="p-6">
+      <HentaiDetailCard data={data.data} />
     </div>
   );
 }

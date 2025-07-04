@@ -8,7 +8,6 @@ import { AnimeResponse, AnimeResponseData } from "@/types";
 import { fetcher } from '@/lib/utils';
 
 
-
 export default function AnimePage() {
   const params = useParams();
   const num = params?.num as string;

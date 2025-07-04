@@ -26,11 +26,6 @@ export interface AnimeResponseData {
   episodeTerbaru: EpisodeItem[];
 }
 
-export interface DetailResponse {
-  success: boolean;
-  data: AnimeDetail;
-}
-
 export interface AnimeDetail {
   title: string;
   image: string;
@@ -39,11 +34,6 @@ export interface AnimeDetail {
   info: Record<string, string>;
   genres: string[];
   episodes: Episode[];
-}
-
-export interface AnimeResponse<T> {
-  success: boolean;
-  data: T;
 }
 
 export interface WatchinAnime {
@@ -57,10 +47,6 @@ export interface WatchinAnime {
   sources_video?: string[];
   title?: string;
 }
-export type WatchAnimeResponse<T> = {
-  success: boolean;
-  data: T;
-};
 
 export interface SearchResult {
   title: string;
@@ -88,3 +74,21 @@ export type SearchResponse = {
   };
   data: SearchResult[];
 };
+export type GenreItem = {
+  title: string;
+  url: string;
+  thumbnail: string;
+  genres: string[];
+  description: string;
+};
+
+export interface AnimeResponse<T> {
+  success: boolean;
+  data: T;
+  pagination?: {
+    currentPage: number;
+    hasNextPage: boolean;
+    nextPageUrl: string | null;
+    totalPages: number;
+  };
+}

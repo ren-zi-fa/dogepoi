@@ -4,11 +4,11 @@
 import Select from "react-select";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import type { SearchResult } from "@/types/index";
 import Link from "next/link";
-import { X } from "lucide-react";
+import {  X } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface Option {
@@ -53,6 +53,7 @@ export default function SearchBar() {
   const [loading, setLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
+  const selectRef = useRef<any>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -111,9 +112,19 @@ export default function SearchBar() {
     }
   };
 
+  
+
   const handleClear = () => {
     setInputValue("");
     setOptions([]);
+    // Clear input field secara langsung
+    if (selectRef.current?.inputRef) {
+      selectRef.current.inputRef.value = "";
+    }
+    // Focus kembali ke input
+    if (selectRef.current?.focus) {
+      selectRef.current.focus();
+    }
   };
 
   if (!isMounted) {
@@ -125,27 +136,29 @@ export default function SearchBar() {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto relative ">
+    <div className="w-full max-w-md mx-auto relative">
       {/* Tombol X */}
       {inputValue.length > 0 && (
         <Button
           onClick={handleClear}
-          size="icon"
           variant="destructive"
-          className="absolute z-20 right-2 top-1/2 -translate-y-1/2  text-white "
+          className="absolute z-20 size-auto p-2 right-2 top-1/2 -translate-y-1/2 text-white"
+          type="button"
         >
-          <X size={18} />
+          <X size={16} />
         </Button>
       )}
 
+
       <Select
-        className="pl-8" 
+        ref={selectRef}
+        className="pl-8"
         inputValue={inputValue}
         onInputChange={(value) => setInputValue(value)}
         onKeyDown={handleKeyDown}
         options={options}
         isLoading={loading}
-        placeholder="Cari hentai..."
+        placeholder="enter untuk search...."
         noOptionsMessage={() =>
           loading
             ? "Mencari..."
@@ -161,15 +174,14 @@ export default function SearchBar() {
           }
         }}
         components={{ Option: CustomOption, DropdownIndicator: () => null }}
-        isClearable={false} 
+        isClearable={false}
         styles={{
           control: (base) => ({
             ...base,
             borderRadius: "0.5rem",
             borderColor: "#e5e7eb",
-            minHeight: "3rem",
+            minHeight: "1rem",
             backgroundColor: "#ffffff",
-            paddingLeft: "2rem", 
           }),
           input: (base) => ({
             ...base,

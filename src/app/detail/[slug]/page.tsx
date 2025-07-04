@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { Loader2 } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import useSWR from 'swr';
+import { Loader2 } from "lucide-react";
+import { useParams } from "next/navigation";
+import useSWR from "swr";
 import { HentaiDetailCard } from "@/components/DetailCard";
-import { fetcher } from '@/lib/utils';
-
+import { fetcher } from "@/lib/utils";
+import { AnimeDetail, AnimeResponse } from "@/types";
 
 export default function AnimeDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
-  
-  const { data, error, isLoading } = useSWR(
+
+  const { data, error, isLoading } = useSWR<AnimeResponse<AnimeDetail>>(
     slug ? `/api/detail/${slug}` : null,
     fetcher,
     {

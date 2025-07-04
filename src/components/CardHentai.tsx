@@ -36,7 +36,7 @@ export default function AnimeHentai({ hentaiTerbaru, episodeTerbaru }: Props) {
       // Complex pagination logic
       if (currentPage <= 4) {
         // Show: 1 2 3 4 5 ... 530
-        for (let i = 1; i <= 5; i++) {
+        for (let i = 1; i <= 2; i++) {
           items.push(i);
         }
         items.push("...");

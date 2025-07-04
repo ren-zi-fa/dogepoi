@@ -31,7 +31,7 @@ export default function SearchResultPage() {
     return <p className="text-center mt-10 text-red-500">Gagal memuat data.</p>;
   if (!data || !data.data.length)
     return (
-      <p className="text-center mt-10">
+      <p className="text-center mt-10 h-screen">
         Tidak ada hasil ditemukan untuk: {query}
       </p>
     );

@@ -11,13 +11,12 @@ interface Props {
 }
 
 export const HentaiDetailCard = ({ data }: Props) => {
-  const url = data.latestEpisode.link;
-  const slug = url.replace(/\/$/, "").split("/").pop();
-
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-xl">{data.title}</CardTitle>
+        <CardTitle className="text-xl">
+          {data.title.replace("Unduh", " ")}
+        </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Gambar dan info */}
@@ -49,22 +48,23 @@ export const HentaiDetailCard = ({ data }: Props) => {
 
           <h3 className="font-semibold text-lg mt-6 mb-2">Genres</h3>
           <div className="flex flex-wrap gap-2">
-            {data.genres.map((genre) => (
-              <Badge key={genre}>{genre}</Badge>
+            {data.genres.map((genre, idx) => (
+              <Link href={`/genre/${genre}`} key={idx}>
+                <Badge>{genre}</Badge>
+              </Link>
             ))}
           </div>
 
-          <h3 className="font-semibold text-lg mt-6 mb-2">Episode Terbaru</h3>
-          <div className="text-sm">
-            <strong>{data.latestEpisode.title}</strong> —{" "}
-            <Link
-              href={`/watch/${slug}`}
-              className="text-blue-500 underline"
-          
-            >
-              watch
-            </Link>
-          </div>
+          <h3 className="font-semibold text-lg mt-6 mb-2">Episode </h3>
+          {data.episodes.map((item, index) => {
+            const url = item.link;
+            const slug = url.replace("https://nekopoi.care/", "");
+            return (
+              <Link href={`/watch/${slug}`} key={index}>
+                <p className="underline text-blue-500">{item.title}</p>
+              </Link>
+            );
+          })}
         </div>
       </CardContent>
     </Card>
